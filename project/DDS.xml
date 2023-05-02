@@ -37,24 +37,33 @@ This code contains trade secrets of Real-Time Innovations, Inc.
         <struct name="MicMessage">
             <member name="Message" stringMaxLength="128" type="string"/>
         </struct>
+<!--        <struct name="ButtonStatus">-->
+<!--            <member name="Switch" stringMaxLength="128" type="string"/>-->
+<!--        </struct>-->
     </types>
 
     <!-- Domain Library -->
 	<!-- this is related to the domain 0 that we set on shape deme-->
     <domain_library name="MyDomainLibrary">
         <domain name="MyDomain" domain_id="0">
+<!--            # Topic 1 - the microphone messages-->
             <register_type name="MicMessage"  type_ref="MicMessage" />
             <topic name="Message" register_type_ref="MicMessage"/>
+<!--            <register_type name="ButtonStatus"  type_ref="ButtonStatus" />-->
+<!--            <topic name="Switch" register_type_ref="ButtonStatus"/> # Topic 2 - the button switch status-->
         </domain>
     </domain_library>
 
 
     <!-- Participant library -->
     <domain_participant_library name="MyParticipantLibrary">
+<!--    Microphone domain declaring-->
         <domain_participant name="MicrophoneDomain" domain_ref="MyDomainLibrary::MyDomain">
+<!--        Microphone QoS profile loaded-->
             <domain_participant_qos base_name="QosLibrary::BasicQosProfile">
             </domain_participant_qos>
             <publisher name="MicrophonePublisher">
+<!--            Microphone is a writer to the "Message" topic-->
                 <data_writer name="MicrophoneWriter" topic_ref="Message">
                     <datawriter_qos>
                     </datawriter_qos>
@@ -62,16 +71,40 @@ This code contains trade secrets of Real-Time Innovations, Inc.
             </publisher>
         </domain_participant>
 
+<!--         <domain_participant name="ButtonDomain" domain_ref="MyDomainLibrary::MyDomain"> # Button domain declaring-->
+<!--            <domain_participant_qos base_name="QosLibrary::BasicQosProfile"> # Button QoS profile loaded-->
+<!--            </domain_participant_qos>-->
+<!--            <publisher name="ButtonPublisher">-->
+<!--                <data_writer name="ButtonWriter" topic_ref="Switch"> # Button is a writer to the "Switch" topic-->
+<!--                    <datawriter_qos>-->
+<!--                    </datawriter_qos>-->
+<!--                </data_writer>-->
+<!--            </publisher>-->
+<!--        </domain_participant>-->
+<!--    Dashboard domain declaring-->
         <domain_participant name="DashboardDomain" domain_ref="MyDomainLibrary::MyDomain">
+<!--        Dashboard QoS profile loaded-->
             <domain_participant_qos base_name="QosLibrary::BasicQosProfile">
             </domain_participant_qos>
             <subscriber name="DashboardSubscriber">
+<!--                Dashboard is a reader to the "Message" topic-->
                 <data_reader name="DashboardWriter" topic_ref="Message" >
                     <datareader_qos>
                     </datareader_qos>
                 </data_reader>
             </subscriber>
         </domain_participant>
+
+<!--        <domain_participant name="ActuatorDomain" domain_ref="MyDomainLibrary::MyDomain"> # Actuator domain declaring-->
+<!--            <domain_participant_qos base_name="QosLibrary::BasicQosProfile"> # Actuator QoS profile loaded-->
+<!--            </domain_participant_qos>-->
+<!--            <subscriber name="ActuatorSubscriber">-->
+<!--                <data_reader name="ActuatorWriter" topic_ref="Switch" > # Actuator is a reader to the "Switch" topic-->
+<!--                    <datareader_qos>-->
+<!--                    </datareader_qos>-->
+<!--                </data_reader>-->
+<!--            </subscriber>-->
+<!--        </domain_participant>-->
 
     </domain_participant_library>
 </dds>
