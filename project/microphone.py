@@ -10,8 +10,10 @@ outputDDS = connector.getOutput("MicrophonePublisher::MicrophoneWriter")
 
 while True:
     now = datetime.now()
+    status = '[ok]'
     formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
     outputDDS.instance.setString("Message", formatted_now)
     outputDDS.write()
-    sleep(1)
+    sleep(0.1)
+    print(f'Published time: {formatted_now}, Status: {status}')
 

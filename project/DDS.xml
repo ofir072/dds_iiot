@@ -13,16 +13,22 @@ This code contains trade secrets of Real-Time Innovations, Inc.
     <!-- Qos Library -->
 	<qos_library name="QosLibrary">
         <qos_profile name="BasicQosProfile" is_default_qos="true">
-            <datareader_qos>
-                <durability>
-                    <kind>DDS_TRANSIENT_DURABILITY_QOS</kind>
-                </durability>
-            </datareader_qos>
             <datawriter_qos>
                 <durability>
-                    <kind>DDS_TRANSIENT_DURABILITY_QOS</kind>
+                  <kind>DDS_TRANSIENT_LOCAL_DURABILITY_QOS</kind>
                 </durability>
+                <reliability>
+                  <kind>DDS_BEST_EFFORT_RELIABILITY_QOS</kind>
+                </reliability>
             </datawriter_qos>
+            <datareader_qos>
+                <durability>
+                  <kind>DDS_TRANSIENT_LOCAL_DURABILITY_QOS</kind>
+                </durability>
+                <reliability>
+                  <kind>DDS_BEST_EFFORT_RELIABILITY_QOS</kind>
+                </reliability>
+            </datareader_qos>
         </qos_profile>
 	</qos_library>
 

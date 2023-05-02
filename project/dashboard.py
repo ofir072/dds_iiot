@@ -14,7 +14,7 @@ while True:
     for j in range(0, numOfSamples):
         if input_DDS.infos.isValid(j):
             some_string = input_DDS.samples.getString(j, "Message")
-            print(f'Received Example: Status: {some_string}')
+            print(f'Received Example: Time: {some_string}')
     sleep(1)
 
 
