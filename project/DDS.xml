@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!--
+(c) 2005-2015 Copyright, Real-Time Innovations.  All rights reserved.
+No duplications, whole or partial, manual or electronic, may be made
+without express written permission.  Any such copies, or revisions thereof,
+must display this notice unaltered.
+This code contains trade secrets of Real-Time Innovations, Inc.
+ -->
+
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.1.0">
+
+    <!-- Qos Library -->
+	<qos_library name="QosLibrary">
+        <qos_profile name="BasicQosProfile" is_default_qos="true">
+            <datareader_qos>
+                <durability>
+                    <kind>DDS_TRANSIENT_DURABILITY_QOS</kind>
+                </durability>
+            </datareader_qos>
+            <datawriter_qos>
+                <durability>
+                    <kind>DDS_TRANSIENT_DURABILITY_QOS</kind>
+                </durability>
+            </datawriter_qos>
+        </qos_profile>
+	</qos_library>
+
+    <!-- types -->
+    <types>
+        <struct name="MicMessage">
+            <member name="Message" stringMaxLength="128" type="string"/>
+        </struct>
+    </types>
+
+    <!-- Domain Library -->
+	<!-- this is related to the domain 0 that we set on shape deme-->
+    <domain_library name="MyDomainLibrary">
+        <domain name="MyDomain" domain_id="0">
+            <register_type name="MicMessage"  type_ref="MicMessage" />
+            <topic name="Message" register_type_ref="MicMessage"/>
+        </domain>
+    </domain_library>
+
+
+    <!-- Participant library -->
+    <domain_participant_library name="MyParticipantLibrary">
+        <domain_participant name="MicrophoneDomain" domain_ref="MyDomainLibrary::MyDomain">
+            <domain_participant_qos base_name="QosLibrary::BasicQosProfile">
+            </domain_participant_qos>
+            <publisher name="MicrophonePublisher">
+                <data_writer name="MicrophoneWriter" topic_ref="Message">
+                    <datawriter_qos>
+                    </datawriter_qos>
+                </data_writer>
+            </publisher>
+        </domain_participant>
+
+        <domain_participant name="DashboardDomain" domain_ref="MyDomainLibrary::MyDomain">
+            <domain_participant_qos base_name="QosLibrary::BasicQosProfile">
+            </domain_participant_qos>
+            <subscriber name="DashboardSubscriber">
+                <data_reader name="DashboardWriter" topic_ref="Message" >
+                    <datareader_qos>
+                    </datareader_qos>
+                </data_reader>
+            </subscriber>
+        </domain_participant>
+
+    </domain_participant_library>
+</dds>

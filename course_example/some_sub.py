@@ -1,9 +1,10 @@
 import rticonnextdds_connector as rti
 from os import path as osPath
 from time import sleep
+
 filepath = osPath.dirname(osPath.realpath(__file__))
 
-connector = rti.Connector("MyParticipantLibrary::Example_sub",  filepath + "/DDS.xml")
+connector = rti.Connector("MyParticipantLibrary::Example_sub",  filepath + "/DDS1.xml")
 input_DDS = connector.getInput("MySubscriber::MyReader")
 
 while True:

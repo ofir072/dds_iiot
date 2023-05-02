@@ -5,7 +5,7 @@ from time import sleep
 import random
 filepath = osPath.dirname(osPath.realpath(__file__))
 
-connector = rti.Connector("MyParticipantLibrary::Example_pub", filepath + "/DDS.xml")
+connector = rti.Connector("MyParticipantLibrary::Example_pub", filepath + "/DDS1.xml")
 outputDDS = connector.getOutput("MyPublisher::MyWriter")
 
 while True:
