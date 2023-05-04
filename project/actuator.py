@@ -16,6 +16,3 @@ while True:
             some_string = input_DDS.samples.getString(j, "Switch")
             print(f'Received Example: Button condition: {some_string}')
     sleep(1)
-
-
-
