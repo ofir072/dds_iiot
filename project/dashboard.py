@@ -5,7 +5,7 @@ from time import sleep
 filepath = osPath.dirname(osPath.realpath(__file__))
 
 connector = rti.Connector("MyParticipantLibrary::DashboardDomain",  filepath + "/DDS.xml")
-input_DDS = connector.getInput("DashboardSubscriber::DashboardWriter")
+input_DDS = connector.getInput("DashboardSubscriber::DashboardReader")
 
 while True:
     input_DDS.take()
