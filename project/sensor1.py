@@ -1,6 +1,6 @@
 import rticonnextdds_connector as rti
 from os import path as osPath
-from time import sleep
+from time import sleep, time
 import random
 
 filepath = osPath.dirname(osPath.realpath(__file__))
@@ -12,6 +12,7 @@ while True:
     status = '[ok]'
     outputDDS.instance.setNumber("Sensor1", randomTemp)
     outputDDS.write()
-    print(f'published: {randomTemp}, Status: {status}')
-    sleep(1)
+    print(f'published: {randomTemp}, status: {status}')
+    sleep(10)
+
 

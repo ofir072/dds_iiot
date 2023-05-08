@@ -100,8 +100,11 @@ This code contains trade secrets of Real-Time Innovations, Inc.
         </struct>
         <struct name="TemperatureInput">
             <member name="Sensor1" type="int32"/>
+            <member name="Timestamp1" type="int32"/>
             <member name="Sensor2" type="int32"/>
+            <member name="Timestamp2" type="int32"/>
             <member name="Sensor3" type="int32"/>
+            <member name="Timestamp3" type="int32"/>
         </struct>
     </types>
 
