@@ -9,7 +9,7 @@ outputDDS = connector.getOutput("ButtonPublisher::ButtonWriter")
 
 
 def output_and_write(condition, status):
-    outputDDS.instance.setString("Switch", condition)
+    outputDDS.instance.setString("Condition", condition)
     outputDDS.write()
     print(f'Published switch condition: {condition}, Status: {status}')
 
