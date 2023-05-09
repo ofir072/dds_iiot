@@ -25,20 +25,16 @@ def button_command():    # Get the button command
 def temperature_measurement():
     last_temp1 = 0
     last_temp2 = 0
-    last_temp3 = 0
     sensors_input.read()
     all_temperatures = sensors_input.samples.getLength()
     for i in range(0, all_temperatures):
         if sensors_input.infos.isValid(i):
             temp1 = sensors_input.samples.getNumber(i, "Sensor1")
             temp2 = sensors_input.samples.getNumber(i, "Sensor2")
-            temp3 = sensors_input.samples.getNumber(i, "Sensor3")
             if temp1 > 1:
                 last_temp1 = temp1
             elif temp2 > 1:
                 last_temp2 = temp2
-            elif temp3 > 1:
-                last_temp3 = temp3
     dif = abs(last_temp2-last_temp1)
     if dif > 8:
         return True
