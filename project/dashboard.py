@@ -58,5 +58,5 @@ def find_extreme():
 while True:
     read_mic_content()
     arrange_temperatures()
-    sleep(1)
+    sleep(5)
 
