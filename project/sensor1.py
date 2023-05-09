@@ -13,6 +13,6 @@ while True:
     outputDDS.instance.setNumber("Sensor1", randomTemp)
     outputDDS.write()
     print(f'published: {randomTemp}, status: {status}')
-    sleep(10)
+    sleep(0.1)
 
 

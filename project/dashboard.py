@@ -17,21 +17,27 @@ extreme_temperature_deque = deque(maxlen=10)
 def read_mic_content():
     microphone_input.read()
     num_of_samples = microphone_input.samples.getLength()
-    print(f'numOfSamples: {num_of_samples}')
     for j in range(0, num_of_samples):
         if microphone_input.infos.isValid(j):
             some_string = microphone_input.samples.getString(j, "Content")
-            print(f'Received Example: Time: {some_string}')
+            print(f'The time now: {some_string}')
 
 
 def arrange_temperatures():
+    temperature_sensor1.clear()
+    temperature_sensor2.clear()
     sensors_input.read()
     all_temperatures = sensors_input.samples.getLength()
-    print(f'numOfSamples: {all_temperatures}')
     for i in range(0, all_temperatures):
         if sensors_input.infos.isValid(i):
-            temperature_sensor1.append(sensors_input.samples.getNumber(i, "Sensor1"))
-            temperature_sensor2.append(sensors_input.samples.getNumber(i, "Sensor2"))
+            temp1 = sensors_input.samples.getNumber(i, "Sensor1")
+            temp2 = sensors_input.samples.getNumber(i, "Sensor2")
+            if temp1 > 1:
+                temperature_sensor1.append(temp1)
+                print(f"t1 : {temperature_sensor1[-1]}")
+            elif temp2 > 1:
+                temperature_sensor2.append(temp2)
+                print(f"t2 : {temperature_sensor2[-1]}")
     find_extreme()
 
 
@@ -40,7 +46,7 @@ def find_extreme():
     for k in reversed(range(0, min(len(temperature_sensor1), len(temperature_sensor2)))):
         dif = abs(temperature_sensor1[len(temperature_sensor1) - k - 1] - temperature_sensor2[len(temperature_sensor2) - k - 1])
         if dif > 8:
-            extreme_temperature_deque.appendleft(dif)
+            extreme_temperature_deque.append(dif)
     if len(extreme_temperature_deque) == 0:
         print("No extreme temperature difference have been measured.")
     else:
@@ -50,7 +56,7 @@ def find_extreme():
 
 
 while True:
-    # read_mic_content()
+    read_mic_content()
     arrange_temperatures()
     sleep(1)
 

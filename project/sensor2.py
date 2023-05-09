@@ -8,11 +8,11 @@ connector = rti.Connector("MyParticipantLibrary::Sensor2Domain", filepath + "/DD
 outputDDS = connector.getOutput("Sensor2Publisher::Sensor2Writer")
 
 while True:
-    randomTemp = random.randint(-6, 6) + 40
+    randomTemp = random.randint(-6, 6) + 23
     status = '[ok]'
     outputDDS.instance.setNumber("Sensor2", randomTemp)
     outputDDS.write()
     print(f'published: {randomTemp}, status: {status}')
-    sleep(10)
+    sleep(0.1)
 
 
