@@ -22,7 +22,7 @@ def button_command():    # Get the button command
     return False
 
 
-def temperature_measurement():
+def temperature_measurement(): # Get the temperature measurement of sensors 1 and 2
     last_temp1 = 0
     last_temp2 = 0
     sensors_input.read()
