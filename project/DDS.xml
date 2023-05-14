@@ -11,6 +11,7 @@ This code contains trade secrets of Real-Time Innovations, Inc.
   xsi:noNamespaceSchemaLocation="http://community.rti.com/schema/5.1.0/rti_dds_profiles.xsd" version="5.1.0">
 
     <!-- Qos Library -->
+    <!-- Qos profiles for each system requirements   -->
 	<qos_library name="QosLibrary">
         <qos_profile name="MicQosProfile" is_default_qos="true">
             <datawriter_qos>
