@@ -8,7 +8,7 @@ connector = rti.Connector("MyParticipantLibrary::Sensor1Domain", filepath + "/DD
 outputDDS = connector.getOutput("Sensor1Publisher::Sensor1Writer")
 
 while True:
-    randomTemp = random.randint(-6, 6) + 33
+    randomTemp = random.randint(-6, 6) + 23
     status = '[ok]'
     outputDDS.instance.setNumber("Sensor1", randomTemp)
     outputDDS.write()

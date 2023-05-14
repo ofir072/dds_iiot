@@ -88,6 +88,32 @@ This code contains trade secrets of Real-Time Innovations, Inc.
                 </history>
             </datareader_qos>
         </qos_profile>
+        <qos_profile name="ActuatorQosProfile" is_default_qos="true">
+            <datawriter_qos>
+                <durability>
+                  <kind>DDS_TRANSIENT_DURABILITY_QOS</kind>
+                </durability>
+                <reliability>
+                  <kind>DDS_RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>DDS_KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>10</depth>
+                </history>
+            </datawriter_qos>
+            <datareader_qos>
+                <durability>
+                  <kind>DDS_TRANSIENT_DURABILITY_QOS</kind>
+                </durability>
+                <reliability>
+                  <kind>DDS_RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>DDS_KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>10</depth>
+                </history>
+            </datareader_qos>
+        </qos_profile>
 	</qos_library>
 
     <!-- types -->
@@ -105,6 +131,7 @@ This code contains trade secrets of Real-Time Innovations, Inc.
         </struct>
         <struct name="ActuatorChange">
             <member name="Status" stringMaxLength="128" type="string"/>
+            <member name="Time" stringMaxLength="128" type="string"/>
         </struct>
     </types>
 
@@ -224,8 +251,14 @@ This code contains trade secrets of Real-Time Innovations, Inc.
                     <datareader_qos base_name="QosLibrary::MicQosProfile">
                     </datareader_qos>
                 </data_reader>
+<!--            Dashboard is a reader to the "Temperature" topic-->
                 <data_reader name="DashboardTemperatureReader" topic_ref="Temperature" >
                     <datareader_qos base_name="QosLibrary::SensorQosProfile">
+                    </datareader_qos>
+                </data_reader>
+<!--            Dashboard is a reader to the "ActuatorStatus" topic-->
+                <data_reader name="DashboardActuatorReader" topic_ref="ActuatorStatus" >
+                    <datareader_qos base_name="QosLibrary::ActuatorQosProfile">
                     </datareader_qos>
                 </data_reader>
             </subscriber>
@@ -244,17 +277,18 @@ This code contains trade secrets of Real-Time Innovations, Inc.
                     <datareader_qos base_name="QosLibrary::ButtonQosProfile">
                     </datareader_qos>
                 </data_reader>
+<!--            Actuator is a reader to the "Temperature" topic-->
                 <data_reader name="ActuatorTemperatureReader" topic_ref="Temperature">
                     <datareader_qos base_name="QosLibrary::SensorQosProfile">
                     </datareader_qos>
                 </data_reader>
             </subscriber>
             <publisher name="ActuatorPublisher">
-                <publisher_qos base_name="QosLibrary::ButtonQosProfile">
+                <publisher_qos base_name="QosLibrary::ActuatorQosProfile">
                 </publisher_qos>
 <!--            Actuator is a writer to the "ActuatorStatus" topic-->
                 <data_writer name="ActuatorWriter" topic_ref="ActuatorStatus">
-                    <datawriter_qos base_name="QosLibrary::ButtonQosProfile">
+                    <datawriter_qos base_name="QosLibrary::ActuatorQosProfile">
                     </datawriter_qos>
                 </data_writer>
             </publisher>

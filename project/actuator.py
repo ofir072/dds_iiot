@@ -1,3 +1,4 @@
+from datetime import datetime
 import rticonnextdds_connector as rti
 from os import path as osPath
 from time import sleep
@@ -7,6 +8,7 @@ filepath = osPath.dirname(osPath.realpath(__file__))
 connector = rti.Connector("MyParticipantLibrary::ActuatorDomain",  filepath + "/DDS.xml")
 button_input = connector.getInput("ActuatorSubscriber::ActuatorButtonReader")
 sensors_input = connector.getInput("ActuatorSubscriber::ActuatorTemperatureReader")
+actuator_output = connector.getOutput("ActuatorPublisher::ActuatorWriter")
 
 actuator_status = "Working"
 heat_stop = False
@@ -47,7 +49,8 @@ def sensor3_measurement():  # Get the temperature measurement of sensors 3
     all_temperatures = sensors_input.samples.getLength()
     for i in range(0, all_temperatures):
         if sensors_input.infos.isValid(i):
-            temp3 = sensors_input.samples.getNumber(i, "Sensor3")
+            if sensors_input.samples.getNumber(i, "Sensor3") > 0:
+                temp3 = sensors_input.samples.getNumber(i, "Sensor3")
     return temp3
 
 
@@ -55,6 +58,8 @@ while True:
 
     if button_command() or heat_stop:
         actuator_status = "Stopped"
+        actuator_output.instance.setString("Status", actuator_status)
+        actuator_output.write()
         if not heat_stop:
             print(f"Status: {actuator_status}, Note: Received a stop command...\n")
         else:
@@ -64,9 +69,17 @@ while True:
         gap = temperature_measurement(2)
         if gap < 8:
             actuator_status = "Degraded"
+            actuator_output.instance.setString("Status", actuator_status)
+            actuator_output.write()
+            current_time = datetime.now()
+            formatted_time = current_time.strftime("%H:%M:%S")
+            actuator_output.instance.setString("Time", formatted_time)
+            actuator_output.write()
             print(f"Status: {actuator_status}, Note: Calibration is needed...")
             sleep(0.5)
             actuator_status = "Working"
+            actuator_output.instance.setString("Status", actuator_status)
+            actuator_output.write()
             print(f"Status: {actuator_status}, Note: W-O-R-K-I-N-G-!\n")
         else:
             print(f"Difference measured: {gap}, calibration thermometer measurement: {sensor3_measurement()}")
@@ -74,5 +87,7 @@ while True:
 
     else:
         actuator_status = "Working"
+        actuator_output.instance.setString("Status", actuator_status)
+        actuator_output.write()
         print(f"Status: {actuator_status}, Note: W-O-R-K-I-N-G-!\n")
     sleep(1)
