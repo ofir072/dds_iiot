@@ -8,6 +8,7 @@ connector = rti.Connector("MyParticipantLibrary::ButtonDomain", filepath + "/DDS
 outputDDS = connector.getOutput("ButtonPublisher::ButtonWriter")
 
 
+# Writing to the "Switch" topic the condition of the button
 def output_and_write(condition, status):
     outputDDS.instance.setString("Condition", condition)
     outputDDS.write()

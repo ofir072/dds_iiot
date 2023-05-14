@@ -11,8 +11,8 @@ outputDDS = connector.getOutput("MicrophonePublisher::MicrophoneWriter")
 while True:
     now = datetime.now()
     status = '[ok]'
-    formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")
+    formatted_now = now.strftime("%Y-%m-%d %H:%M:%S")           # Arrange the current date in ****/**/** **:**:** form
     outputDDS.instance.setString("Content", formatted_now)
-    outputDDS.write()
-    sleep(0.1)
+    outputDDS.write()                                           # The writing to the "Message" topic
     print(f'Published time: {formatted_now}, Status: {status}')
+    sleep(0.1)

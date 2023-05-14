@@ -203,6 +203,15 @@ This code contains trade secrets of Real-Time Innovations, Inc.
                     </datawriter_qos>
                 </data_writer>
             </publisher>
+            <subscriber name="Sensor1Subscriber">
+                <subscriber_qos>
+                </subscriber_qos>
+<!--            Sensor1 is a reader to the "ActuatorStatus" topic-->
+                <data_reader name="Sensor1Reader" topic_ref="ActuatorStatus" >
+                    <datareader_qos base_name="QosLibrary::ActuatorQosProfile">
+                    </datareader_qos>
+                </data_reader>
+            </subscriber>
         </domain_participant>
 
 <!--     Sensor2 domain declaring-->
@@ -219,6 +228,15 @@ This code contains trade secrets of Real-Time Innovations, Inc.
                     </datawriter_qos>
                 </data_writer>
             </publisher>
+             <subscriber name="Sensor2Subscriber">
+                <subscriber_qos>
+                </subscriber_qos>
+<!--            Sensor2 is a reader to the "ActuatorStatus" topic-->
+                <data_reader name="Sensor2Reader" topic_ref="ActuatorStatus" >
+                    <datareader_qos base_name="QosLibrary::ActuatorQosProfile">
+                    </datareader_qos>
+                </data_reader>
+            </subscriber>
         </domain_participant>
 
 <!--     Sensor3 domain declaring-->

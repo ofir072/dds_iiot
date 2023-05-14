@@ -8,10 +8,10 @@ connector = rti.Connector("MyParticipantLibrary::Sensor3Domain", filepath + "/DD
 outputDDS = connector.getOutput("Sensor3Publisher::Sensor3Writer")
 
 while True:
-    randomTemp = random.randint(-1, 1) + 23
+    randomTemp = random.randint(-1, 1) + 23                 # The temperature sensor3 will display
     status = '[ok]'
     outputDDS.instance.setNumber("Sensor3", randomTemp)
-    outputDDS.write()
+    outputDDS.write()                                       # The writing to the "Temperature" topic
     print(f'published: {randomTemp}, status: {status}')
     sleep(1)
 
