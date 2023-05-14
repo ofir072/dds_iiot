@@ -8,26 +8,29 @@ connector = rti.Connector("MyParticipantLibrary::ActuatorDomain",  filepath + "/
 button_input = connector.getInput("ActuatorSubscriber::ActuatorButtonReader")
 sensors_input = connector.getInput("ActuatorSubscriber::ActuatorTemperatureReader")
 
+actuator_status = "Working"
+heat_stop = False
+
 
 def button_command():    # Get the button command
+    global heat_stop
     button_input.read()
     num_of_samples = button_input.samples.getLength()
-    print(f'numOfSamples: {num_of_samples}')
     for j in range(0, num_of_samples):
         if button_input.infos.isValid(j):
             some_string = button_input.samples.getString(j, "Condition")
-            print(f'Received Example: Button condition: {some_string}')
             if some_string == "Stop":
+                heat_stop = False
                 return True
     return False
 
 
-def temperature_measurement():  # Get the temperature measurement of sensors 1 and 2
+def temperature_measurement(k):  # Get the temperature measurement of sensors 1 and 2
     last_temp1 = 0
     last_temp2 = 0
     sensors_input.read()
     all_temperatures = sensors_input.samples.getLength()
-    for i in range(0, all_temperatures):
+    for i in range(0, all_temperatures-k):
         if sensors_input.infos.isValid(i):
             temp1 = sensors_input.samples.getNumber(i, "Sensor1")
             temp2 = sensors_input.samples.getNumber(i, "Sensor2")
@@ -35,14 +38,12 @@ def temperature_measurement():  # Get the temperature measurement of sensors 1 a
                 last_temp1 = temp1
             elif temp2 > 1:
                 last_temp2 = temp2
-    dif = abs(last_temp2-last_temp1)
-    if dif > 8:
-        return True
-    return False
+    return abs(last_temp2-last_temp1)
 
 
 def sensor3_measurement():  # Get the temperature measurement of sensors 3
     sensors_input.read()
+    temp3 = 0
     all_temperatures = sensors_input.samples.getLength()
     for i in range(0, all_temperatures):
         if sensors_input.infos.isValid(i):
@@ -51,18 +52,27 @@ def sensor3_measurement():  # Get the temperature measurement of sensors 3
 
 
 while True:
-    status = "Working"
-    if button_command():
-        status = "Stopped"
-        print("Received a stop command...")
-        sleep(0.5)
-        while button_command():
-            sleep(0.1)
-    if temperature_measurement() > 8:
-        gap = temperature_measurement
-        if gap > 8:
-            status = "Degraded"
-            print(f"Difference measured: {gap}, calibration thermometer measurement: {sensor3_measurement}")
-            print("Calibration is needed...")
-            sleep(0.5)
 
+    if button_command() or heat_stop:
+        actuator_status = "Stopped"
+        if not heat_stop:
+            print(f"Status: {actuator_status}, Note: Received a stop command...\n")
+        else:
+            print(f"Status: {actuator_status}, Note: Waiting for restart...")
+
+    elif temperature_measurement(0) > 8:
+        gap = temperature_measurement(2)
+        if gap < 8:
+            actuator_status = "Degraded"
+            print(f"Status: {actuator_status}, Note: Calibration is needed...")
+            sleep(0.5)
+            actuator_status = "Working"
+            print(f"Status: {actuator_status}, Note: W-O-R-K-I-N-G-!\n")
+        else:
+            print(f"Difference measured: {gap}, calibration thermometer measurement: {sensor3_measurement()}")
+            heat_stop = True
+
+    else:
+        actuator_status = "Working"
+        print(f"Status: {actuator_status}, Note: W-O-R-K-I-N-G-!\n")
+    sleep(1)
